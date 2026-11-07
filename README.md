@@ -1,4 +1,24 @@
-# Terminal
+# Terminal, on libghostty-gtk
+
+> **This is a fork.** It is elementary's [Terminal](https://github.com/elementary/terminal)
+> with VTE replaced by [libghostty-gtk](https://github.com/arsfeld/libghostty-gtk), a GTK4
+> terminal widget on [libghostty-vt](https://lib.ghostty.org/), Ghostty's terminal engine.
+> The app, its look and its features are elementary's; the engine underneath is Ghostty's.
+>
+> - **Branch:** `libghostty-gtk` (the default here) is upstream's `8.1.0` release plus
+>   the commits that do the port. `master` tracks upstream unchanged.
+> - **The port is a rename.** libghostty-gtk copies the part of VTE's `Vte.Terminal` API
+>   that Terminal uses, under the namespace `GhosttyGtk`, so the diff against 8.1.0 is
+>   about ten lines. See `git log 8.1.0..libghostty-gtk`.
+> - **What it gains:** Ghostty's VT handling (kitty keyboard protocol, synchronized
+>   output, grapheme clustering) and OSC 52 clipboard writes and opt-in reads, so
+>   programs such as zellij, Neovim and Claude Code can set the clipboard, over SSH too.
+> - **Status:** experimental, used daily on NixOS. Not affiliated with elementary or
+>   Ghostty, and not proposed upstream.
+>
+> Everything below is upstream's README, except that the build needs libghostty-gtk
+> instead of VTE.
+
 [![Packaging status](https://repology.org/badge/tiny-repos/elementary-terminal.svg)](https://repology.org/metapackage/elementary-terminal)
 [![Translation status](https://l10n.elementary.io/widgets/terminal/-/svg-badge.svg)](https://l10n.elementary.io/engage/terminal/?utm_source=widget)
 
@@ -15,7 +35,7 @@ You'll need the following dependencies:
  * libadwaita-1-dev (>= 1.5.0)
  * libgranite-7-dev (>= 7.7.0)
  * libgtk-4-dev (>= 4.1.0)
- * libvte-2.91-gtk4-dev (>= 0.76.0)
+ * [libghostty-gtk](https://github.com/arsfeld/libghostty-gtk) (`ghostty-gtk-1`), which needs libghostty-vt 1.0
  * libxml2-utils
  * meson
  * valac (>= 0.56)
