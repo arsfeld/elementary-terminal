@@ -4,7 +4,7 @@
  */
 
 namespace Terminal {
-    public class TerminalWidget : Vte.Terminal {
+    public class TerminalWidget : GhosttyGtk.Terminal {
         public enum TabState {
             NONE,
             WORKING,
@@ -783,7 +783,7 @@ namespace Terminal {
         }
 
         private void update_cursor_shape () {
-            set_cursor_shape ((Vte.CursorShape) Application.settings.get_enum ("cursor-shape"));
+            set_cursor_shape ((GhosttyGtk.CursorShape) Application.settings.get_enum ("cursor-shape"));
         }
 
         void on_child_exited () {
@@ -853,7 +853,7 @@ namespace Terminal {
             string?[] envv = null;
 
             if (shell == "") {
-                shell = Vte.get_user_shell ();
+                shell = GhosttyGtk.get_user_shell ();
             }
 
             if (shell == "") {
@@ -881,7 +881,7 @@ namespace Terminal {
             /* We need opening uri to be available asap when constructing window with working directory
              * so remove idle loop, which appears not to be necessary any longer */
             this.spawn_async (
-                Vte.PtyFlags.DEFAULT,
+                GhosttyGtk.PtyFlags.DEFAULT,
                 dir,
                 { shell },
                 envv,
@@ -935,7 +935,7 @@ namespace Terminal {
         private void clickable (string[] str) {
             foreach (unowned string exp in str) {
                 try {
-                    var regex = new Vte.Regex.for_match (exp, -1, PCRE2.Flags.MULTILINE);
+                    var regex = new GhosttyGtk.Regex.for_match (exp, -1, PCRE2.Flags.MULTILINE);
                     int id = this.match_add_regex (regex, 0);
                     this.match_set_cursor_name (id, "pointer");
                 } catch (GLib.Error error) {
@@ -1071,7 +1071,7 @@ namespace Terminal {
              * character of the prompt being selected for some reason. We assume a nominal
              * maximum line length rather than determine the actual length.  */
             size_t len = 0;
-            return get_text_range_format (Vte.Format.TEXT, start_row, 0, output_end_row - 1, 1000, out len) + "\n";
+            return get_text_range_format (GhosttyGtk.Format.TEXT, start_row, 0, output_end_row - 1, 1000, out len) + "\n";
         }
 
         private void scroll_to_command (GLib.SimpleAction action, GLib.Variant? parameter) {

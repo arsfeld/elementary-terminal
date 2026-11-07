@@ -452,7 +452,7 @@ namespace Terminal {
             terminal_widget.window_title_changed.connect (set_title_label);
         }
 
-        private void on_terminal_child_exited (Vte.Terminal term, int status) {
+        private void on_terminal_child_exited (GhosttyGtk.Terminal term, int status) {
             var tw = (TerminalWidget)term;
             if (tw.tab.child != tw.parent) {
                 // TabView already removed tab - ignore signal
