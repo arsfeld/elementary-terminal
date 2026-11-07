@@ -1,0 +1,6 @@
+io.elementary.terminal-ghostty (8.1.0) noble; urgency=medium
+
+  * Placeholder: CI writes the real entry (8.1.0+ghostty.git<date>.<sha>)
+    before each build.
+
+ -- Alexandre Rosenfeld <alex@rosenfeld.one>  Sat, 07 Nov 2026 00:00:00 +0000

@@ -1,43 +1,55 @@
+# This fork's CI, in place of elementary's (which builds against VTE, and
+# runs elementary's release and translation machinery). Builds and tests on
+# every push and pull request in elementary OS 8, against libghostty-gtk's
+# latest release. A push to libghostty-gtk also publishes the .deb as a
+# GitHub Release, which arsfeld/apt picks up into the apt repo.
 name: CI
 
 on:
+  push:
   pull_request:
-    types:
-      - opened
-      - reopened
-      - synchronize
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    strategy:
-      fail-fast: false
-      matrix:
-        version: [stable, unstable, development-target]
-    container:
-      image: ghcr.io/elementary/docker:${{ matrix.version }}
-
+    container: ghcr.io/elementary/docker:stable
     steps:
-    - uses: actions/checkout@v7
-    - name: Install Dependencies
-      run: |
-        apt update
-        apt install -y desktop-file-utils gettext libgranite-7-dev libgtk-4-dev libadwaita-1-dev libvte-2.91-gtk4-dev libxml2-utils meson valac xvfb
-    - name: Build
-      run: |
-        meson setup build
-        meson compile -C build
-        meson test -C build --print-errorlogs
-        meson install -C build
+      # Before checkout: without git in the container, actions/checkout
+      # downloads a tarball and the build cannot read the commit.
+      - name: Install git
+        run: apt-get update -qq && apt-get install -y -qq git ca-certificates
+      - uses: actions/checkout@v7
+      - name: Trust the checkout
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      - name: Build, test and package
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: ci/build-deb.sh
+      - uses: actions/upload-artifact@v7
+        with:
+          name: deb
+          path: dist/
 
-  lint:
+  release:
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/libghostty-gtk'
     runs-on: ubuntu-latest
-
-    container:
-      image: valalang/lint
-
+    permissions:
+      contents: write
     steps:
-    - uses: actions/checkout@v7
-    - name: Lint
-      run: io.elementary.vala-lint -d .
+      - uses: actions/download-artifact@v8
+        with:
+          name: deb
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version=$(cat VERSION)
+          gh release create "deb/$version" ./*.deb \
+            --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+            --title "$version" \
+            --notes "Debian package for elementary OS 8 (noble, amd64), built from $GITHUB_SHA. Install it from the apt repo: https://arsfeld.github.io/apt"
