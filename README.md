@@ -16,6 +16,19 @@
 > - **Status:** experimental, used daily on NixOS. Not affiliated with elementary or
 >   Ghostty, and not proposed upstream.
 >
+> - **Install on elementary OS 8** from the signed apt repo at
+>   [arsfeld.github.io/apt](https://arsfeld.github.io/apt), which replaces
+>   elementary's `io.elementary.terminal` with `io.elementary.terminal-ghostty`:
+>
+>   ```sh
+>   sudo curl -fsSLo /usr/share/keyrings/arsfeld.gpg https://arsfeld.github.io/apt/arsfeld.gpg
+>   echo "deb [signed-by=/usr/share/keyrings/arsfeld.gpg] https://arsfeld.github.io/apt noble main" \
+>     | sudo tee /etc/apt/sources.list.d/arsfeld.list
+>   sudo apt update && sudo apt install io.elementary.terminal-ghostty
+>   ```
+>
+>   `sudo apt install io.elementary.terminal` goes back to elementary's.
+>
 > Everything below is upstream's README, except that the build needs libghostty-gtk
 > instead of VTE.
 
