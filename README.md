@@ -17,13 +17,13 @@
 >   Ghostty, and not proposed upstream.
 >
 > - **Install on elementary OS 8** from the signed apt repo at
->   [arsfeld.github.io/apt](https://arsfeld.github.io/apt), which replaces
+>   [arsfeld.github.io/pantheon-apt](https://arsfeld.github.io/pantheon-apt), which replaces
 >   elementary's `io.elementary.terminal` with `io.elementary.terminal-ghostty`:
 >
 >   ```sh
->   sudo curl -fsSLo /usr/share/keyrings/arsfeld.gpg https://arsfeld.github.io/apt/arsfeld.gpg
->   echo "deb [signed-by=/usr/share/keyrings/arsfeld.gpg] https://arsfeld.github.io/apt noble main" \
->     | sudo tee /etc/apt/sources.list.d/arsfeld.list
+>   sudo curl -fsSLo /usr/share/keyrings/pantheon-apt.gpg https://arsfeld.github.io/pantheon-apt/pantheon-apt.gpg
+>   echo "deb [signed-by=/usr/share/keyrings/pantheon-apt.gpg] https://arsfeld.github.io/pantheon-apt noble main" \
+>     | sudo tee /etc/apt/sources.list.d/pantheon-apt.list
 >   sudo apt update && sudo apt install io.elementary.terminal-ghostty
 >   ```
 >
