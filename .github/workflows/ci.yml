@@ -2,7 +2,7 @@
 # runs elementary's release and translation machinery). Builds and tests on
 # every push and pull request in elementary OS 8, against libghostty-gtk's
 # latest release. A push to libghostty-gtk also publishes the .deb as a
-# GitHub Release, which arsfeld/pantheon-apt picks up into the apt repo.
+# GitHub Release, which arsfeld/pantheon-extras picks up into the apt repo.
 name: CI
 
 on:
@@ -52,4 +52,4 @@ jobs:
           gh release create "deb/$version" ./*.deb \
             --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
             --title "$version" \
-            --notes "Debian package for elementary OS 8 (noble, amd64), built from $GITHUB_SHA. Install it from the apt repo: https://arsfeld.github.io/pantheon-apt"
+            --notes "Debian package for elementary OS 8 (noble, amd64), built from $GITHUB_SHA. Install it from the apt repo: https://arsfeld.github.io/pantheon-extras"
